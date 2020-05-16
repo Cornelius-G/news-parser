@@ -17,38 +17,44 @@ def caesar(text, step):
     return text.translate(table)
 
 
-def remove_residues(s):
-    return re.sub('=a.*?#?\?','',s, flags=re.DOTALL)
-    #return re.sub('=a.*?=9a\?','',s, flags=re.DOTALL)
+def remove_residues(s, shift):
+    if shift==-1:
+        return re.sub('=a.*?#?\?','',s, flags=re.DOTALL)
+    else:
+        return s
 
-def make_pretty(s):
-    s=s.replace("=strong?", "")
-    s=s.replace("=strong 9?", "")
-    s=s.replace("=9strong?", "")
-    s=s.replace("=9a?", "")
+def make_pretty(s, shift):
+    if shift == -1:
+        s=s.replace("=strong?", "")
+        s=s.replace("=strong 9?", "")
+        s=s.replace("=9strong?", "")
+        s=s.replace("=9a?", "")
 
-    s=s.replace("{", "z")
-    s=s.replace(")", "(")
-    s=s.replace("*", ")")
+        s=s.replace("{", "z")
+        s=s.replace(")", "(")
+        s=s.replace("*", ")")
 
-    s=s.replace("-", "~§")
-    s=s.replace(",", "-")
-    s=s.replace("~§", ",")
+        s=s.replace("-", "~§")
+        s=s.replace(",", "-")
+        s=s.replace("~§", ",")
 
-    s=s.replace("@", "?")
-    s=s.replace(".", "-")
-    s=s.replace("/", ".")
-    s=s.replace(":", "9")
-    s=s.replace(";", ":")
-    s=s.replace("[", "Z")
-    s=s.replace("÷", "ö")
-    s=s.replace("ý", "ü")
-    s=s.replace("Ý", "Ü")
+        s=s.replace("@", "?")
+        s=s.replace(".", "-")
+        s=s.replace("/", ".")
+        s=s.replace(":", "9")
+        s=s.replace(";", ":")
+        s=s.replace("[", "Z")
+        s=s.replace("÷", "ö")
+        s=s.replace("ý", "ü")
+        s=s.replace("Ý", "Ü")
 
-    s=s.replace("à", "ß")
-    s=s.replace("å", "ä")
+        s=s.replace("à", "ß")
+        s=s.replace("å", "ä")
 
-    return s
+        return s
+    else:
+        return s
+
 
 
 
@@ -68,8 +74,8 @@ def decode(URL, shift=-1):
     paragraphs = get_paragraphs(soup)
 
     decoded = [caesar(p, shift) for p in paragraphs]
-    decoded = [make_pretty(d) for d in decoded]
-    decoded = [remove_residues(d) for d in decoded]
+    decoded = [make_pretty(d, shift) for d in decoded]
+    decoded = [remove_residues(d, shift) for d in decoded]
 
     print(title, "\n")
     print(description, "\n")
